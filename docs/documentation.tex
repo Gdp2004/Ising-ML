@@ -1,0 +1,184 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{booktabs}
+
+\geometry{margin=1in}
+
+% Code highlighting settings
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\title{\textbf{Rilevamento delle Fasi nel Modello di Ising tramite Machine Learning}}
+\author{Progetto ML}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Introduzione}
+Il Machine Learning (ML) è un campo di studio che consente ai computer di apprendere dai dati senza essere esplicitamente programmati. In questo progetto, applichiamo tecniche di ML a un problema classico della fisica statistica: il **Modello di Ising**.
+
+Il Modello di Ising descrive il ferromagnetismo in materiali statistici. Il sistema è composto da variabili discrete di spin $s_i \in \{-1, +1\}$ disposte su un reticolo. 
+L'obiettivo è classificare lo stato del sistema in una delle due fasi termodinamiche:
+\begin{itemize}
+    \item \textbf{Fase Ordinata (Ferromagnetica)}: $T < T_c$, dove gli spin tendono ad allinearsi.
+    \item \textbf{Fase Disordinata (Paramagnetica)}: $T > T_c$, dove l'agitazione termica domina e gli spin sono casuali.
+\end{itemize}
+Per un reticolo 2D quadrato, la temperatura critica teorica è $T_c \approx 2.269$.
+
+\section{Data Engineering}
+Come discusso nel capitolo sul Data Engineering, la qualità dei dati è fondamentale per il successo di un modello di ML. Abbiamo implementato una pipeline robusta per generare, corrompere e pulire i dati.
+
+\subsection{Generazione dei Dati (Ising Simulation)}
+Utilizziamo l'algoritmo **Metropolis-Hastings** per campionare configurazioni di equilibrio dalla distribuzione di Boltzmann.
+Per affrontare il problema del \textit{Critical Slowing Down} (la tendenza del sistema a evolvere lentamente vicino alla temperatura critica), abbiamo implementato una **Termalizzazione Adattiva**:
+
+\begin{lstlisting}[language=Python, caption=Termalizzazione Adattiva in data\_generator.py]
+if 2.0 < T < 2.5:
+    steps = 5000  # Piu' passi vicino alla T critica per garantire equilibrio
+else:
+    steps = 1000  # Meno passi lontano dalla criticita'
+\end{lstlisting}
+
+Il dataset è bilanciato e consiste in:
+\begin{itemize}
+    \item 1000 matrici a bassa temperatura ($T < 2.0$, Classe 0).
+    \item 1000 matrici ad alta temperatura ($T > 2.5$, Classe 1).
+    \item 500 matrici vicino alla temperatura critica ($T \approx 2.27$) per il test.
+\end{itemize}
+
+\subsection{Simulazione Sensori e Corruzione Dati}
+Simuliamo un ambiente reale in cui i sensori possono fallire. Introduciamo due tipi di difetti:
+\begin{enumerate}
+    \item \textbf{Missing Values (MCAR)}: Il 5\% dei pixel viene perso (impostato a `NaN`). Assumiamo che i dati manchino in modo completamente casuale (\textit{Missing Completely At Random}).
+    \item \textbf{Outliers}: Il 2\% dei pixel registra valori errati (es. 50), fisicamente impossibili dato che lo spin deve essere $\pm 1$.
+\end{enumerate}
+
+\subsection{Data Cleaning}
+Nel modulo \texttt{data\_cleaning.py}, implementiamo strategie per ripristinare i dati:
+
+\textbf{Gestione Outlier}:
+Rileviamo valori anomali utilizzando una soglia fisica. Poiché $|s_i| = 1$, qualsiasi valore con $|x| > 1.5$ viene considerato un errore del sensore e marcato come mancante (`NaN`) per essere successivamente imputato.
+
+\textbf{Imputazione (Imputation)}:
+Per i valori mancanti, utilizziamo una strategia di imputazione basata sulla moda (\textit{Most Frequent}).
+\begin{lstlisting}[language=Python]
+# Da data_cleaning.py
+imputer = SimpleImputer(strategy='most_frequent')
+flat_imputed = imputer.fit_transform(flat_data)
+\end{lstlisting}
+Questa scelta è giustificata dalla natura discreta degli spin: se la maggioranza dei campioni ha valore +1, è probabile che anche il dato mancante sia +1.
+
+\section{Feature Engineering}
+Esploriamo due approcci distinti per rappresentare i reticoli di Ising, come descritto nelle pratiche di Feature Engineering.
+
+\subsection{Approccio 1: Physics-Based (Domain Knowledge)}
+Sfruttiamo la conoscenza del dominio fisico per estrarre feature globali informative.
+Calcoliamo due osservabili termodinamiche fondamentali:
+
+\begin{enumerate}
+    \item \textbf{Magnetizzazione Media ($M$)}: Parametro d'ordine del sistema.
+    $$ M = \frac{1}{N} \left| \sum_{i} s_i \right| $$
+
+    \item \textbf{Energia Media ($E$)}: Hamiltoniana del sistema (interazione tra primi vicini).
+    $$ E = -\frac{1}{2N} \sum_{\langle i,j \rangle} s_i s_j $$
+\end{enumerate}
+
+Queste feature riducono la dimensionalità da $16 \times 16 = 256$ a sole 2 dimensioni, rendendo il modello estremamente interpretabile.
+
+\subsection{Approccio 2: Raw Data (Data-Driven)}
+In questo approccio, non facciamo assunzioni fisiche. Appiattiamo l'intera matrice del reticolo in un vettore di feature:
+$$ \text{Shape}: (N, 16, 16) \rightarrow (N, 256) $$
+Questo permette al modello di apprendere autonomamente pattern spaziali complessi, sebbene a costo di una maggiore complessità computazionale e minore interpretabilità ("Black Box").
+
+\section{Model Development}
+Abbiamo selezionato i modelli in base alla natura delle feature, seguendo i principi di selezione del modello (Occam's Razor, Trade-off Bias-Variance).
+
+\subsection{Modelli Selezionati}
+\begin{itemize}
+    \item \textbf{Logistic Regression} (per Feature Fisiche): Dato che la transizione di fase è ben definita nello spazio (Magnetizzazione, Energia), un modello lineare semplice è sufficiente ed efficace.
+    \item \textbf{Random Forest} (per Raw Data): Per gestire la complessità dei 256 pixel grezzi e le loro interazioni non lineari, utilizziamo un modello basato su alberi (Random Forest) con 100 estimatori.
+\end{itemize}
+
+\section{Risultati Sperimentali e Valutazione}
+
+\subsection{Accuratezza e Critical Slowing Down}
+Valutiamo i modelli non solo con l'accuratezza globale, ma analizzando le prestazioni in funzione della temperatura.
+Come atteso, osserviamo una \textbf{Critical U-Shape}:
+\begin{itemize}
+    \item Lontano da $T_c$, l'accuratezza è vicina al 100\%.
+    \item Vicino a $T_c \approx 2.27$, l'accuratezza cala drasticamente. Questo riflette la fisica del sistema: al punto critico, le fluttuazioni sono massime e le due fasi sono difficilmente distinguibili.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../reports/acc_temp_physics.png}
+    \caption{Accuratezza vs Temperatura (Modello Physics-Based).}
+    \label{fig:accuracy}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../reports/acc_temp_raw.png}
+    \caption{Accuratezza vs Temperatura (Modello Raw Data).}
+    \label{fig:accuracy_raw}
+\end{figure}
+
+\subsection{Matrice di Confusione}
+La matrice di confusione ci aiuta a visualizzare i Falsi Positivi/Negativi, fondamentali per capire se il modello è sbilanciato verso una delle due fasi.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{../reports/cm_physics.png}
+    \caption{Matrice di Confusione (Modello Physics-Based).}
+    \label{fig:cm_phys}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{../reports/cm_raw.png}
+    \caption{Matrice di Confusione (Modello Raw Data).}
+    \label{fig:cm_raw}
+\end{figure}
+
+\section{Applicazione Interattiva}
+Il progetto include una Web App sviluppata con \textbf{Streamlit} (\texttt{app.py}) per l'inferenza real-time.
+Funzionalità principali:
+\begin{itemize}
+    \item Simulazione live di reticoli di Ising a temperatura variabile.
+    \item Calcolo dinamico di Magnetizzazione ed Energia.
+    \item Visualizzazione delle predizioni del modello ML vs Temperatura teorica.
+\end{itemize}
+
+\end{document}
