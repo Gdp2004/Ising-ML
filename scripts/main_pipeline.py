@@ -99,6 +99,23 @@ def main():
     plot_accuracy_vs_temp(model_raw, X_test_raw, y_test, temps_test, 
                           title="Accuracy vs Temp (Raw - RF)", 
                           filename=os.path.join(REPORT_DIR, "acc_temp_raw.png"))
+                          
+    # Combined ROC Curve
+    from analysis import plot_combined_roc_curve
+    
+    models_dict = {
+        "Physics (Logistic)": model_phys,
+        "Raw Data (RF)": model_raw
+    }
+    
+    X_test_dict = {
+        "Physics (Logistic)": X_test_phys,
+        "Raw Data (RF)": X_test_raw
+    }
+    
+    plot_combined_roc_curve(models_dict, X_test_dict, y_test, 
+                           title="ROC Curve Comparison", 
+                           filename=os.path.join(REPORT_DIR, "roc_combined.png"))
 
     print("\n=== PIPELINE COMPLETE ===")
     print(f"Check the {REPORT_DIR} folder for results.")

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.4.15)  15 FEB 2026 15:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.4.15)  17 FEB 2026 13:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -361,8 +361,7 @@ tex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count301
 \l__pdf_internal_box=\box57
-)
-No file documentation.aux.
+) (documentation.aux)
 \openout1 = `documentation.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
@@ -410,6 +409,7 @@ fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
 Package hyperref Info: Link coloring OFF on input line 44.
+ (documentation.out) (documentation.out)
 \@outlinefile=\write3
 \openout3 = `documentation.out'.
 
@@ -449,89 +449,88 @@ Package hyperref Info: Link coloring OFF on input line 44.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-No file documentation.toc.
-\tf@toc=\write4
-\openout4 = `documentation.toc'.
-
-[1
-
-{C:/Users/gdpal/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}]
 (C:\Users\gdpal\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstlang1.sty
 File: lstlang1.sty 2023/02/27 1.9 listings language file
 )
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 68.
+nput line 65.
 
-[2] [3]
-<../reports/acc_temp_physics.png, id=50, 578.16pt x 433.62pt>
+[1
+
+{C:/Users/gdpal/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}] [2]
+<../reports/acc_temp_physics.png, id=95, 578.16pt x 433.62pt>
 File: ../reports/acc_temp_physics.png Graphic file (type png)
 <use ../reports/acc_temp_physics.png>
 Package pdftex.def Info: ../reports/acc_temp_physics.png  used on input line 14
-7.
+4.
 (pdftex.def)             Requested size: 362.37569pt x 271.77934pt.
-<../reports/acc_temp_raw.png, id=52, 578.16pt x 433.62pt>
+
+[3]
+<../reports/acc_temp_raw.png, id=103, 578.16pt x 433.62pt>
 File: ../reports/acc_temp_raw.png Graphic file (type png)
 <use ../reports/acc_temp_raw.png>
-Package pdftex.def Info: ../reports/acc_temp_raw.png  used on input line 154.
+Package pdftex.def Info: ../reports/acc_temp_raw.png  used on input line 151.
 (pdftex.def)             Requested size: 362.37569pt x 271.77934pt.
+<../reports/cm_physics.png, id=104, 433.62pt x 361.35pt>
+File: ../reports/cm_physics.png Graphic file (type png)
+<use ../reports/cm_physics.png>
+Package pdftex.def Info: ../reports/cm_physics.png  used on input line 161.
+(pdftex.def)             Requested size: 271.7835pt x 226.49933pt.
  [4
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.158 
-       <../reports/acc_temp_physics.png>]
-<../reports/cm_physics.png, id=63, 433.62pt x 361.35pt>
-File: ../reports/cm_physics.png Graphic file (type png)
-<use ../reports/cm_physics.png>
-Package pdftex.def Info: ../reports/cm_physics.png  used on input line 164.
-(pdftex.def)             Requested size: 271.7835pt x 226.49933pt.
-<../reports/cm_raw.png, id=64, 433.62pt x 361.35pt>
-File: ../reports/cm_raw.png Graphic file (type png)
-<use ../reports/cm_raw.png>
-Package pdftex.def Info: ../reports/cm_raw.png  used on input line 171.
-(pdftex.def)             Requested size: 271.7835pt x 226.49933pt.
- [5
+l.165 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.175 
-      
+l.165 
+       <../reports/acc_temp_physics.png> <../reports/acc_temp_raw.png>]
+<../reports/cm_raw.png, id=113, 433.62pt x 361.35pt>
+File: ../reports/cm_raw.png Graphic file (type png)
+<use ../reports/cm_raw.png>
+Package pdftex.def Info: ../reports/cm_raw.png  used on input line 168.
+(pdftex.def)             Requested size: 271.7835pt x 226.49933pt.
+<../reports/roc_combined.png, id=114, 722.7pt x 578.16pt>
+File: ../reports/roc_combined.png Graphic file (type png)
+<use ../reports/roc_combined.png>
+Package pdftex.def Info: ../reports/roc_combined.png  used on input line 178.
+(pdftex.def)             Requested size: 362.37569pt x 289.89973pt.
+
+[5
 pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.175 
-       <../reports/acc_temp_raw.png> <../reports/cm_physics.png>] [6
+l.182 
+      
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) ha
 s been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.185 \end{document}
-                     <../reports/cm_raw.png>] (documentation.aux)
+l.182 
+       <../reports/cm_physics.png> <../reports/cm_raw.png>] [6
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) ha
+s been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.192 \end{document}
+                     <../reports/roc_combined.png>] (documentation.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `documentation.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `documentation.out':
-(rerunfilecheck)             Before: <no file>
-(rerunfilecheck)             After:  7DE992A77DA5510417F21EA3589F7663;2670.
+Package rerunfilecheck Info: File `documentation.out' has not changed.
+(rerunfilecheck)             Checksum: 6A715ADE13858DBBA1E4D3E2F68B81FD;2776.
  ) 
 Here is how much of TeX's memory you used:
- 12043 strings out of 474486
- 183364 string characters out of 5743755
- 1966542 words of memory out of 5000000
- 34164 multiletter control sequences out of 15000+600000
+ 12072 strings out of 474486
+ 184057 string characters out of 5743755
+ 1983542 words of memory out of 5000000
+ 34187 multiletter control sequences out of 15000+600000
  565690 words of font info for 63 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  75i,6n,79p,481b,1334s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -549,9 +548,9 @@ Users/gdpal/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti12
 .pfb><C:/Users/gdpal/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
 cm/cmtt10.pfb><C:/Users/gdpal/AppData/Local/Programs/MiKTeX/fonts/type1/public/
 amsfonts/cm/cmtt12.pfb>
-Output written on documentation.pdf (6 pages, 253256 bytes).
+Output written on documentation.pdf (6 pages, 297679 bytes).
 PDF statistics:
- 141 PDF objects out of 1000 (max. 8388607)
- 39 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 190 PDF objects out of 1000 (max. 8388607)
+ 40 named destinations out of 1000 (max. 500000)
+ 146 words of extra memory for PDF output out of 10000 (max. 10000000)
 

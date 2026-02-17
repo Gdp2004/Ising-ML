@@ -34,6 +34,13 @@ class ModelTrainer:
     def predict(self, X_test):
         return self.model.predict(X_test)
     
+    def predict_proba(self, X_test):
+        """Return probability estimates for the test data."""
+        if hasattr(self.model, "predict_proba"):
+            return self.model.predict_proba(X_test)
+        else:
+            raise NotImplementedError(f"Model {self.model_type} does not support predict_proba")
+
     def evaluate(self, X_test, y_test):
         y_pred = self.predict(X_test)
         acc = accuracy_score(y_test, y_pred)

@@ -250,4 +250,79 @@ def plot_thermodynamic_observables(observables, filename="thermodynamic_observab
     print(f"Specific Heat peak at T = {temps[c_max_idx]:.2f} (C = {specific_heat[c_max_idx]:.4f})")
     print(f"Expected Tc ≈ 2.27")
 
+def plot_roc_curve(model, X_test, y_test, title="ROC Curve", filename="roc_curve.png"):
+    """
+    Plot Receiver Operating Characteristic (ROC) curve.
+    """
+    from sklearn.metrics import roc_curve, auc
+    import matplotlib.pyplot as plt
+    
+    print(f"Generating ROC curve for {title}...")
+    
+    # Get probabilities for the positive class (Class 1: Disordered)
+    try:
+        y_probs = model.predict_proba(X_test)[:, 1]
+    except (AttributeError, NotImplementedError):
+        print(f"Warning: Model does not support predict_proba. Skipping ROC verification.")
+        return
+
+    fpr, tpr, thresholds = roc_curve(y_test, y_probs)
+    roc_auc = auc(fpr, tpr)
+    
+    plt.figure(figsize=(8, 6))
+    plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})')
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(title)
+    plt.legend(loc="lower right")
+    plt.grid(True, alpha=0.3)
+    plt.savefig(filename)
+    plt.close()
+    print(f"Saved {filename}")
+
+def plot_combined_roc_curve(models_dict, X_test_dict, y_test, title="ROC Curve Comparison", filename="roc_combined.png"):
+    """
+    Plot combined ROC curves for multiple models.
+    
+    Args:
+        models_dict: Dictionary {label: model_instance}
+        X_test_dict: Dictionary {label: X_test_data}
+        y_test: True labels (assumed same for all models)
+    """
+    from sklearn.metrics import roc_curve, auc
+    import matplotlib.pyplot as plt
+    
+    print(f"Generating combined ROC curve...")
+    plt.figure(figsize=(10, 8))
+    
+    for label, model in models_dict.items():
+        if label not in X_test_dict:
+            continue
+            
+        X_test = X_test_dict[label]
+        
+        try:
+            # Class 1 is Disordered
+            y_probs = model.predict_proba(X_test)[:, 1]
+            fpr, tpr, _ = roc_curve(y_test, y_probs)
+            roc_auc = auc(fpr, tpr)
+            plt.plot(fpr, tpr, lw=2, label=f'{label} (AUC = {roc_auc:.2f})')
+        except (AttributeError, NotImplementedError):
+            print(f"Warning: Model {label} does not support predict_proba. Skipping.")
+            
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(title)
+    plt.legend(loc="lower right")
+    plt.grid(True, alpha=0.3)
+    plt.savefig(filename)
+    plt.close()
+    print(f"Saved {filename}")
+
 

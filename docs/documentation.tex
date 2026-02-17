@@ -42,9 +42,7 @@
 \date{\today}
 
 \begin{document}
-
 \maketitle
-\tableofcontents
 
 \section{Introduzione}
 Il Machine Learning (ML) è un campo di studio che consente ai computer di apprendere dai dati senza essere esplicitamente programmati. In questo progetto, applichiamo tecniche di ML a un problema classico della fisica statistica: il **Modello di Ising**.
@@ -170,6 +168,16 @@ La matrice di confusione ci aiuta a visualizzare i Falsi Positivi/Negativi, fond
     \includegraphics[width=0.6\textwidth]{../reports/cm_raw.png}
     \caption{Matrice di Confusione (Modello Raw Data).}
     \label{fig:cm_raw}
+\end{figure}
+
+\subsection{Curva ROC}
+La curva ROC (Receiver Operating Characteristic) mostra la capacità del modello di discriminare tra le due classi al variare della soglia di decisione. L'Area Sotto la Curva (AUC) è una metrica di performance aggregata: un valore di 1.0 indica un classificatore perfetto.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../reports/roc_combined.png}
+    \caption{Confronto Curve ROC: Physics-Based vs Raw Data.}
+    \label{fig:roc_combined}
 \end{figure}
 
 \section{Applicazione Interattiva}
