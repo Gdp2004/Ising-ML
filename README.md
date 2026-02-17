@@ -1,5 +1,7 @@
 # Ising Model ML Project
 
+Link for presentation: https://prezi.com/view/O9FTr9iUchsZddY8nORg/?referral_token=Dk3mf5lnB3FN
+
 This project implements a Machine Learning pipeline to classify Ising Model spin configurations as "Ordered" (Ferromagnetic) or "Disordered" (Paramagnetic). It mimics a real-world scenario with data corruption ("Sensor Errors") and compares two modeling approaches:
 1. **Physics-Based**: Using features like Magnetization and Energy.
 2. **Raw Data**: Using Deep Learning / Random Forest on raw spin matrices.
